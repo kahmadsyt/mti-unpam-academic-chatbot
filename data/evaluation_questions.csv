@@ -1,0 +1,8 @@
+test_question,expected_category
+Mata kuliah semester satu apa saja?,kurikulum_semester_1
+Kalau saya suka cyber security cocoknya peminatan apa?,rekomendasi_peminatan
+Peminatan data science belajar apa?,peminatan_data_science
+Apa perbedaan IoT dan data science?,rekomendasi_peminatan
+Semester empat ada mata kuliah apa?,kurikulum_semester_4
+"Saya suka memasak nasi goreng, apa resepnya?",fallback
+Berapa harga biaya kuliah terbaru?,fallback
