@@ -1,0 +1,8 @@
+test_question,expected_category,predicted_category,similarity_score,status,is_correct,matched_question,error_type
+Mata kuliah semester satu apa saja?,kurikulum_semester_1,kurikulum_semester_1,0.6447,answered,True,Apa saja mata kuliah Semester 1 MTI UNPAM?,correct
+Kalau saya suka cyber security cocoknya peminatan apa?,rekomendasi_peminatan,rekomendasi_peminatan,0.3261,answered,True,"Saya tertarik keamanan siber, cocok ambil peminatan apa?",correct
+Peminatan data science belajar apa?,peminatan_data_science,peminatan_data_science,0.7014,answered,True,Apa fokus peminatan Data Science?,correct
+Apa perbedaan IoT dan data science?,rekomendasi_peminatan,rekomendasi_peminatan,0.7071,answered,True,Apa perbedaan peminatan Data Security dan Data Science?,correct
+Semester empat ada mata kuliah apa?,kurikulum_semester_4,kurikulum_semester_4,0.5183,answered,True,Apa mata kuliah Semester 4 MTI UNPAM?,correct
+"Saya suka memasak nasi goreng, apa resepnya?",fallback,rekomendasi_peminatan,0.2559,answered,False,"Saya tertarik keamanan siber, cocok ambil peminatan apa?",false_positive_out_of_scope
+Berapa harga biaya kuliah terbaru?,fallback,peminatan_iot,0.304,answered,False,Apa saja mata kuliah peminatan IoT?,false_positive_out_of_scope

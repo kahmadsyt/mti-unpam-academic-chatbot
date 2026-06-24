@@ -1,0 +1,9 @@
+check,status,detail
+required_columns,PASS,[]
+total_rows,INFO,34
+total_categories,INFO,10
+empty_question,PASS,0
+empty_answer,PASS,0
+duplicate_question,PASS,0
+duplicate_answer,PASS,0
+minimum_category_size,WARNING,min=1

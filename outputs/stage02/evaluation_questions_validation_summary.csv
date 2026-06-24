@@ -1,0 +1,7 @@
+check,status,detail
+required_columns,PASS,[]
+total_rows,INFO,7
+empty_test_question,PASS,0
+duplicate_test_question,PASS,0
+invalid_expected_category,PASS,[]
+evaluation_category_coverage,WARNING,45.45%
