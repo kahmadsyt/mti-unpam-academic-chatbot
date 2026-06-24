@@ -1,0 +1,48 @@
+test_question,expected_category,predicted_category,similarity_score,status,is_correct,matched_question
+Mata kuliah semester satu apa saja?,kurikulum_semester_1,kurikulum_semester_2,0.5234,answered,False,Apa saja mata kuliah Semester 2 MTI UNPAM?
+Semester 1 belajar apa?,kurikulum_semester_1,kurikulum_semester_1,0.4432,answered,True,Apa saja mata kuliah Semester 1 MTI UNPAM?
+Apa fungsi mata kuliah data mining?,kurikulum_semester_1,kurikulum_semester_1,0.4379,answered,True,Apa yang dipelajari pada Data Mining?
+Kenapa harus belajar algoritma analisis?,kurikulum_semester_1,kurikulum_semester_1,0.515,answered,True,Apa yang dipelajari pada Algoritma Analisis?
+Modelling optimization itu untuk apa?,kurikulum_semester_1,kurikulum_semester_1,0.3937,answered,True,Apa yang dipelajari pada Modelling and Optimization?
+Semester dua ada mata kuliah apa?,kurikulum_semester_2,kurikulum_semester_2,0.3943,answered,True,Semester dua MTI UNPAM mempelajari apa saja?
+Statistik dan analisis data itu penting untuk apa?,kurikulum_semester_2,kurikulum_semester_1,0.3957,answered,False,Mengapa Algoritma Analisis penting untuk mahasiswa MTI?
+Metode penelitian dipakai untuk apa?,kurikulum_semester_2,kurikulum_semester_2,0.6567,answered,True,Apa yang dipelajari pada Metode Penelitian?
+Advanced intelligent systems membahas apa?,kurikulum_semester_2,kurikulum_semester_2,0.6495,answered,True,Apa yang dipelajari pada Advanced Intelligent Systems?
+Apa manfaat audit dan tata kelola IT?,kurikulum_semester_2,kurikulum_semester_2,1.0,answered,True,Apa manfaat Audit dan Tata Kelola IT?
+Peminatan data science belajar apa?,peminatan_data_science,peminatan_data_science,0.5018,answered,True,Apa fokus peminatan Data Science?
+Advanced NLP itu membahas apa?,peminatan_data_science,peminatan_data_science,0.5054,answered,True,Apa yang dipelajari pada Advanced NLP?
+Kalau suka computer vision cocoknya apa?,peminatan_data_science,peminatan_data_science,0.5485,answered,True,Apa yang dipelajari pada Advanced Computer Vision?
+Tools yang perlu disiapkan untuk data science apa?,peminatan_data_science,peminatan_data_science,0.4403,answered,True,Apa saja kompetensi dasar yang perlu disiapkan sebelum memilih Data Science?
+Apakah pemula python bisa ambil data science?,peminatan_data_science,peminatan_data_science,0.7508,answered,True,Apakah pemula Python bisa mengambil Data Science?
+Saya suka cyber security cocoknya peminatan apa?,rekomendasi_peminatan,peminatan_data_security,0.4893,answered,False,Apa yang dipelajari pada Cyber Security?
+Saya suka forensik digital sebaiknya pilih apa?,rekomendasi_peminatan,rekomendasi_peminatan,0.5859,answered,True,"Kalau saya suka forensik digital dan investigasi insiden, pilih apa?"
+Kalau suka sensor dan perangkat pintar pilih peminatan apa?,rekomendasi_peminatan,rekomendasi_peminatan,0.6371,answered,True,"Saya tertarik sensor dan perangkat pintar, cocok ambil peminatan apa?"
+Saya ingin jadi data analyst cocok ambil apa?,rekomendasi_peminatan,rekomendasi_peminatan,0.3356,answered,True,Apa peminatan yang cocok untuk menjadi data analyst?
+Saya masih bingung memilih peminatan,rekomendasi_peminatan,fallback,0.2064,fallback,False,Bagaimana cara memilih topik tesis MTI?
+Apa saja mata kuliah Data Security?,peminatan_data_security,peminatan_data_science,0.6841,answered,False,Apa saja mata kuliah peminatan Data Science?
+Digital Forensik mempelajari apa?,peminatan_data_security,peminatan_data_security,0.4628,answered,True,Apa yang dipelajari pada Digital Forensik?
+Cyber Security membahas apa saja?,peminatan_data_security,peminatan_data_security,0.474,answered,True,Apa yang dipelajari pada Cyber Security?
+Apakah orang jaringan cocok ambil data security?,peminatan_data_security,peminatan_data_security,0.4419,answered,True,Apakah latar belakang jaringan cocok untuk Data Security?
+Peminatan IoT belajar apa?,peminatan_iot,peminatan_iot,0.4566,answered,True,Apa fokus peminatan IoT?
+Advanced Internet of Things itu apa?,peminatan_iot,peminatan_iot,0.8108,answered,True,Apa yang dipelajari pada Advanced Internet of Things?
+Apa hubungan IoT dengan machine learning?,peminatan_iot,kurikulum_semester_1,0.7466,answered,False,Apa hubungan Data Mining dengan machine learning?
+Skill awal untuk peminatan IoT apa saja?,peminatan_iot,peminatan_iot,0.5807,answered,True,Skill dasar apa untuk peminatan IoT?
+Semester empat ada mata kuliah apa?,kurikulum_semester_4,kurikulum_semester_1,0.4461,answered,False,Mata kuliah apa yang paling dekat dengan Data Science di Semester 1?
+Technopreneurship membahas apa?,kurikulum_semester_4,kurikulum_semester_1,0.4104,answered,False,Semester satu MTI UNPAM membahas apa saja?
+Tesis itu apa di semester 4?,tesis,kurikulum_semester_4,0.3661,answered,False,Apakah Semester 4 hanya berisi tesis?
+Contoh topik tesis data science apa?,tesis,tesis,1.0,answered,True,Contoh topik tesis Data Science apa?
+Apakah project kantor bisa jadi tesis?,tesis,tesis,0.505,answered,True,Apakah project di tempat kerja bisa dijadikan tesis?
+Lulusan MTI bisa kerja sebagai apa?,prospek_karier,prospek_karier,0.471,answered,True,Apakah lulusan MTI bisa menjadi dosen atau peneliti?
+Prospek karier Data Security apa?,prospek_karier,prospek_karier,0.9357,answered,True,Prospek karier Data Security apa saja?
+Karier untuk peminatan IoT apa saja?,prospek_karier,prospek_karier,0.5426,answered,True,Prospek karier IoT apa saja?
+Apakah MTI cocok untuk pekerja IT?,profil_program,profil_program,1.0,answered,True,Apakah MTI cocok untuk pekerja IT?
+Apa itu Magister Teknik Informatika UNPAM?,profil_program,profil_program,0.857,answered,True,Apa itu Program Magister Teknik Informatika UNPAM?
+Apakah chatbot ini informasi resmi kampus?,profil_program,profil_program,0.8619,answered,True,Apakah chatbot ini merupakan informasi resmi kampus?
+"Saya suka memasak nasi goreng, apa resepnya?",fallback,fallback,0.4864,fallback,True,Bagaimana cara membuat nasi goreng?
+Berapa harga biaya kuliah terbaru?,fallback,fallback,0.795,fallback,True,Berapa biaya kuliah terbaru MTI UNPAM?
+Kapan jadwal PMB paling baru?,fallback,fallback,0.5434,fallback,True,Kapan jadwal pendaftaran mahasiswa baru MTI UNPAM?
+Bagaimana cuaca di Pamulang hari ini?,fallback,fallback,0.8776,fallback,True,Bagaimana cuaca hari ini?
+Siapa presiden Indonesia sekarang?,fallback,fallback,0.6673,fallback,True,Siapa presiden saat ini?
+Tolong berikan password wifi kampus,fallback,fallback,0.8437,fallback,True,Berikan saya password WiFi kampus
+Saya mau rekomendasi investasi bitcoin,fallback,fallback,0.6181,fallback,True,Buatkan rekomendasi investasi crypto
+Bagaimana cara memperbaiki motor mogok?,fallback,tesis,0.5405,answered,False,Bagaimana cara memilih topik tesis MTI?

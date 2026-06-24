@@ -1,8 +1,48 @@
 test_question,expected_category
 Mata kuliah semester satu apa saja?,kurikulum_semester_1
-Kalau saya suka cyber security cocoknya peminatan apa?,rekomendasi_peminatan
+Semester 1 belajar apa?,kurikulum_semester_1
+Apa fungsi mata kuliah data mining?,kurikulum_semester_1
+Kenapa harus belajar algoritma analisis?,kurikulum_semester_1
+Modelling optimization itu untuk apa?,kurikulum_semester_1
+Semester dua ada mata kuliah apa?,kurikulum_semester_2
+Statistik dan analisis data itu penting untuk apa?,kurikulum_semester_2
+Metode penelitian dipakai untuk apa?,kurikulum_semester_2
+Advanced intelligent systems membahas apa?,kurikulum_semester_2
+Apa manfaat audit dan tata kelola IT?,kurikulum_semester_2
 Peminatan data science belajar apa?,peminatan_data_science
-Apa perbedaan IoT dan data science?,rekomendasi_peminatan
+Advanced NLP itu membahas apa?,peminatan_data_science
+Kalau suka computer vision cocoknya apa?,peminatan_data_science
+Tools yang perlu disiapkan untuk data science apa?,peminatan_data_science
+Apakah pemula python bisa ambil data science?,peminatan_data_science
+Saya suka cyber security cocoknya peminatan apa?,rekomendasi_peminatan
+Saya suka forensik digital sebaiknya pilih apa?,rekomendasi_peminatan
+Kalau suka sensor dan perangkat pintar pilih peminatan apa?,rekomendasi_peminatan
+Saya ingin jadi data analyst cocok ambil apa?,rekomendasi_peminatan
+Saya masih bingung memilih peminatan,rekomendasi_peminatan
+Apa saja mata kuliah Data Security?,peminatan_data_security
+Digital Forensik mempelajari apa?,peminatan_data_security
+Cyber Security membahas apa saja?,peminatan_data_security
+Apakah orang jaringan cocok ambil data security?,peminatan_data_security
+Peminatan IoT belajar apa?,peminatan_iot
+Advanced Internet of Things itu apa?,peminatan_iot
+Apa hubungan IoT dengan machine learning?,peminatan_iot
+Skill awal untuk peminatan IoT apa saja?,peminatan_iot
 Semester empat ada mata kuliah apa?,kurikulum_semester_4
+Technopreneurship membahas apa?,kurikulum_semester_4
+Tesis itu apa di semester 4?,tesis
+Contoh topik tesis data science apa?,tesis
+Apakah project kantor bisa jadi tesis?,tesis
+Lulusan MTI bisa kerja sebagai apa?,prospek_karier
+Prospek karier Data Security apa?,prospek_karier
+Karier untuk peminatan IoT apa saja?,prospek_karier
+Apakah MTI cocok untuk pekerja IT?,profil_program
+Apa itu Magister Teknik Informatika UNPAM?,profil_program
+Apakah chatbot ini informasi resmi kampus?,profil_program
 "Saya suka memasak nasi goreng, apa resepnya?",fallback
 Berapa harga biaya kuliah terbaru?,fallback
+Kapan jadwal PMB paling baru?,fallback
+Bagaimana cuaca di Pamulang hari ini?,fallback
+Siapa presiden Indonesia sekarang?,fallback
+Tolong berikan password wifi kampus,fallback
+Saya mau rekomendasi investasi bitcoin,fallback
+Bagaimana cara memperbaiki motor mogok?,fallback

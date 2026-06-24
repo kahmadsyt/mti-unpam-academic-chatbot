@@ -1,0 +1,11 @@
+metric,value
+faq_rows_stage03,100
+faq_categories_stage03,11
+evaluation_rows_stage03,47
+tfidf_matrix_rows_stage03,100
+tfidf_matrix_features_stage03,570
+baseline_accuracy_stage01,71.43%
+stage02_recommended_threshold,0.31
+stage03_accuracy_at_0_31,78.72%
+stage03_best_threshold,0.25
+stage03_accuracy_at_best_threshold,78.72%
