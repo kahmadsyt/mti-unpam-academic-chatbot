@@ -1,0 +1,4 @@
+scenario_type,total_questions,accuracy,avg_similarity,fallback_count,answered_count
+in_scope,15,0.8667,0.5921,0,15
+out_of_scope,6,1.0,0.7505,6,0
+paraphrase,3,1.0,0.3937,0,3

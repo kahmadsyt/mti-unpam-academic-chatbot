@@ -1,219 +1,339 @@
 from pathlib import Path
-
-import pandas as pd
-import plotly.express as px
 import streamlit as st
 
-from utils.chatbot_utils import build_tfidf_engine, evaluate_questions, get_chatbot_response, load_faq_data
+# =========================================================
+# Import chatbot engine
+# =========================================================
+try:
+    from utils.chatbot_utils import chatbot_response as chatbot_engine
+except ImportError:
+    try:
+        from utils.chatbot_utils import get_chatbot_response as chatbot_engine
+    except ImportError:
+        chatbot_engine = None
 
 
-BASE_DIR = Path(__file__).resolve().parent
-FAQ_PATH = BASE_DIR / "data" / "faq_mti_unpam.csv"
-EVAL_PATH = BASE_DIR / "data" / "evaluation_questions.csv"
+# =========================================================
+# Konfigurasi path
+# =========================================================
+PROJECT_ROOT = Path(__file__).resolve().parent
+ASSETS_DIR = PROJECT_ROOT / "assets"
 
+LOGO_PATH = ASSETS_DIR / "logo-unpam.png"
+ANIME_PATH = ASSETS_DIR / "anime-unpam.png"
+
+FIXED_THRESHOLD = 0.31
+
+
+# =========================================================
+# Konfigurasi halaman
+# =========================================================
 st.set_page_config(
-    page_title="MTI UNPAM Academic Assistant",
+    page_title="MTI Assistant UNPAM",
     page_icon="🎓",
     layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
+
+# =========================================================
+# Custom CSS ringan
+# =========================================================
 st.markdown(
     """
     <style>
-    .main .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
-        max-width: 1180px;
-    }
-    .app-title {
-        font-size: 2rem;
-        font-weight: 800;
-        margin-bottom: 0.25rem;
-    }
-    .app-subtitle {
-        color: #5f6368;
-        font-size: 1rem;
-        margin-bottom: 1.25rem;
-    }
-    .info-card {
-        border: 1px solid #e6e8eb;
-        border-radius: 16px;
-        padding: 1rem 1.1rem;
-        background: #ffffff;
-        box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
-    }
-    .small-note {
-        color: #6b7280;
-        font-size: 0.9rem;
-    }
+        #MainMenu {
+            visibility: hidden;
+        }
+
+        footer {
+            visibility: hidden;
+        }
+
+        header {
+            visibility: hidden;
+        }
+
+        [data-testid="collapsedControl"] {
+            display: none;
+        }
+
+        section[data-testid="stSidebar"] {
+            display: none;
+        }
+
+        .block-container {
+            max-width: 1180px;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+        }
+
+        h1, h2, h3 {
+            color: #0f172a;
+        }
+
+        .app-subtitle {
+            color: #475569;
+            font-size: 0.98rem;
+            line-height: 1.65;
+            margin-top: -0.4rem;
+        }
+
+        .small-note {
+            color: #64748b;
+            font-size: 0.86rem;
+            line-height: 1.5;
+        }
+
+        .assistant-box {
+            background-color: #f8fafc;
+            border-left: 5px solid #1d4ed8;
+            padding: 0.85rem 1rem;
+            border-radius: 0.8rem;
+            font-size: 0.94rem;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .example-box {
+            background-color: #fff7ed;
+            border-left: 5px solid #f59e0b;
+            padding: 0.85rem 1rem;
+            border-radius: 0.8rem;
+            font-size: 0.92rem;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        div[data-testid="stChatMessage"] {
+            border-radius: 0.9rem;
+            padding: 0.25rem 0.35rem;
+        }
+
+        .stButton > button {
+            border-radius: 0.75rem;
+            height: 2.7rem;
+            font-weight: 600;
+        }
+
+        div[data-testid="stTextInput"] input {
+            border-radius: 0.75rem;
+        }
     </style>
+    """,
+    unsafe_allow_html=True
+)
+
+
+# =========================================================
+# Helper function
+# =========================================================
+def reset_chat():
+    st.session_state.messages = [
+        {
+            "role": "assistant",
+            "content": (
+                "Halo, selamat datang di **MTI Assistant UNPAM** 👋\n\n"
+                "Silakan ajukan pertanyaan seputar Program Magister Teknik Informatika, "
+                "mata kuliah, peminatan, tesis, Data Mining, Data Science, dan informasi akademik "
+                "yang tersedia pada dataset chatbot."
+            ),
+        }
+    ]
+
+
+def get_bot_answer(user_question: str) -> str:
+    """
+    Mengambil jawaban dari chatbot engine.
+    Threshold dibuat tetap agar tidak muncul pada UI.
+    """
+
+    if chatbot_engine is None:
+        return (
+            "Maaf, engine chatbot belum berhasil dimuat. "
+            "Pastikan file `utils/chatbot_utils.py` tersedia dan fungsi chatbot sudah benar."
+        )
+
+    try:
+        result = chatbot_engine(user_question, threshold=FIXED_THRESHOLD)
+    except TypeError:
+        try:
+            result = chatbot_engine(user_question)
+        except Exception as exc:
+            return f"Maaf, terjadi kendala saat memproses pertanyaan: `{exc}`"
+    except Exception as exc:
+        return f"Maaf, terjadi kendala saat memproses pertanyaan: `{exc}`"
+
+    if isinstance(result, dict):
+        return str(
+            result.get("answer")
+            or result.get("response")
+            or result.get("bot_response")
+            or result.get("message")
+            or "Maaf, saya belum dapat memberikan jawaban yang sesuai."
+        )
+
+    if isinstance(result, (tuple, list)) and len(result) > 0:
+        return str(result[0])
+
+    return str(result)
+
+
+# =========================================================
+# Session state
+# =========================================================
+if "messages" not in st.session_state:
+    reset_chat()
+
+
+# =========================================================
+# Header aplikasi
+# =========================================================
+header_col1, header_col2 = st.columns([1, 8])
+
+with header_col1:
+    if LOGO_PATH.exists():
+        st.image(str(LOGO_PATH), width=92)
+    else:
+        st.markdown("## 🎓")
+
+with header_col2:
+    st.markdown("# MTI Assistant UNPAM")
+    st.markdown(
+        """
+        <div class="app-subtitle">
+            Chatbot informasi akademik Program Magister Teknik Informatika Universitas Pamulang
+            berbasis <b>FAQ</b>, <b>TF-IDF</b>, dan <b>Cosine Similarity</b>.
+            Aplikasi ini dirancang sebagai project final Data Mining untuk membantu pengguna
+            memperoleh informasi akademik secara cepat, sederhana, dan mudah dipahami.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+st.divider()
+
+
+# =========================================================
+# Layout utama
+# =========================================================
+left_col, right_col = st.columns([1.05, 2.35], gap="large")
+
+
+# =========================================================
+# Panel kiri: Anime assistant
+# =========================================================
+with left_col:
+    with st.container(border=True):
+        st.subheader("Asisten Virtual Akademik")
+
+        if ANIME_PATH.exists():
+            st.image(str(ANIME_PATH), use_container_width=True)
+        else:
+            st.warning("File `assets/anime-unpam.png` belum ditemukan.")
+
+        st.markdown(
+            """
+            <div class="assistant-box">
+                Halo 👋<br><br>
+                Saya siap membantu menjawab pertanyaan akademik seputar
+                <b>MTI UNPAM</b>, mata kuliah, peminatan, tesis,
+                Data Mining, Data Science, dan topik pembelajaran terkait.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.write("")
+
+        st.markdown(
+            """
+            <div class="example-box">
+                <b>Contoh pertanyaan:</b><br>
+                • Apa itu Data Mining?<br>
+                • Apa saja mata kuliah semester 1?<br>
+                • Apa peminatan di MTI UNPAM?<br>
+                • Apa yang dibahas pada tesis?
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.write("")
+
+        if st.button("Reset Percakapan", use_container_width=True):
+            reset_chat()
+            st.rerun()
+
+        st.markdown(
+            '<div class="small-note">Gunakan tombol reset untuk memulai percakapan baru.</div>',
+            unsafe_allow_html=True,
+        )
+
+
+# =========================================================
+# Panel kanan: Area chat
+# =========================================================
+with right_col:
+    with st.container(border=True):
+        st.subheader("Area Chat")
+
+        chat_area = st.container(height=520, border=True)
+
+        with chat_area:
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
+
+        st.write("")
+
+        with st.form("chat_form", clear_on_submit=True):
+            user_prompt = st.text_input(
+                label="Pertanyaan",
+                placeholder="Tulis pertanyaan Anda di sini...",
+                label_visibility="collapsed",
+            )
+
+            submit_col1, submit_col2 = st.columns([1, 4])
+
+            with submit_col1:
+                submitted = st.form_submit_button("Kirim", use_container_width=True)
+
+            with submit_col2:
+                st.markdown(
+                    '<div class="small-note">Contoh: Apa yang dibahas pada tesis?</div>',
+                    unsafe_allow_html=True,
+                )
+
+        if submitted and user_prompt.strip():
+            st.session_state.messages.append(
+                {
+                    "role": "user",
+                    "content": user_prompt.strip(),
+                }
+            )
+
+            bot_answer = get_bot_answer(user_prompt.strip())
+
+            st.session_state.messages.append(
+                {
+                    "role": "assistant",
+                    "content": bot_answer,
+                }
+            )
+
+            st.rerun()
+
+
+# =========================================================
+# Footer
+# =========================================================
+st.divider()
+st.markdown(
+    """
+    <div class="small-note" style="text-align:center;">
+        MTI Assistant UNPAM • Project Final Data Mining • FAQ-based Chatbot with TF-IDF and Cosine Similarity
+    </div>
     """,
     unsafe_allow_html=True,
 )
-
-
-@st.cache_data
-def load_data():
-    faq_df = load_faq_data(FAQ_PATH)
-    eval_df = pd.read_csv(EVAL_PATH).fillna("") if EVAL_PATH.exists() else pd.DataFrame()
-    return faq_df, eval_df
-
-
-@st.cache_resource
-def load_engine(faq_df: pd.DataFrame):
-    return build_tfidf_engine(faq_df)
-
-
-faq_df, eval_df = load_data()
-vectorizer, tfidf_matrix = load_engine(faq_df)
-
-with st.sidebar:
-    st.title("🎓 MTI Assistant")
-    st.caption("Chatbot informasi akademik MTI UNPAM berbasis TF-IDF dan Cosine Similarity.")
-    threshold = st.slider("Threshold similarity", 0.05, 0.80, 0.25, 0.05)
-    st.divider()
-    st.markdown("**Contoh pertanyaan:**")
-    st.markdown("- Apa saja mata kuliah semester 1?")
-    st.markdown("- Peminatan Data Science belajar apa?")
-    st.markdown("- Saya tertarik cyber security, cocok peminatan apa?")
-    st.markdown("- Apa perbedaan IoT dan Data Science?")
-    st.divider()
-    st.caption("Catatan: chatbot ini adalah prototype akademik, bukan kanal resmi PMB.")
-
-st.markdown('<div class="app-title">MTI UNPAM Academic Assistant</div>', unsafe_allow_html=True)
-st.markdown(
-    '<div class="app-subtitle">Chatbot informasi akademik Program Magister Teknik Informatika berbasis Text Mining.</div>',
-    unsafe_allow_html=True,
-)
-
-tab_chatbot, tab_dashboard, tab_dataset, tab_about = st.tabs([
-    "💬 Chatbot",
-    "📊 Dashboard",
-    "📚 Dataset FAQ",
-    "ℹ️ Tentang Project",
-])
-
-with tab_chatbot:
-    col_left, col_right = st.columns([1.5, 1])
-
-    with col_left:
-        st.subheader("Tanyakan informasi seputar MTI UNPAM")
-        user_question = st.text_input(
-            "Pertanyaan",
-            placeholder="Contoh: Saya tertarik data dan machine learning, cocok ambil peminatan apa?",
-        )
-
-        if st.button("Cari Jawaban", type="primary", use_container_width=True):
-            result = get_chatbot_response(user_question, faq_df, vectorizer, tfidf_matrix, threshold)
-            st.markdown("### Jawaban")
-            if result["status"] == "answered":
-                st.success(result["answer"])
-            elif result["status"] == "fallback":
-                st.warning(result["answer"])
-            else:
-                st.info(result["answer"])
-
-            metric_cols = st.columns(3)
-            metric_cols[0].metric("Similarity score", result["similarity_score"])
-            metric_cols[1].metric("Kategori", result["category"])
-            metric_cols[2].metric("Status", result["status"])
-
-            with st.expander("Lihat pertanyaan FAQ yang paling mirip"):
-                st.write(result["matched_question"])
-
-    with col_right:
-        st.markdown("### Ringkasan Dataset")
-        st.markdown('<div class="info-card">', unsafe_allow_html=True)
-        st.metric("Total FAQ", len(faq_df))
-        st.metric("Jumlah kategori", faq_df["category"].nunique())
-        st.metric("Jumlah peminatan", faq_df.loc[faq_df["peminatan"] != "", "peminatan"].nunique())
-        st.markdown('</div>', unsafe_allow_html=True)
-        st.caption("Dataset dapat diperluas jika terdapat informasi resmi tambahan dari program studi.")
-
-with tab_dashboard:
-    st.subheader("Dashboard Evaluasi dan Distribusi Dataset")
-
-    col1, col2 = st.columns(2)
-    category_counts = faq_df["category"].value_counts().reset_index()
-    category_counts.columns = ["category", "count"]
-    fig_category = px.bar(
-        category_counts,
-        x="count",
-        y="category",
-        orientation="h",
-        title="Distribusi FAQ berdasarkan kategori",
-        labels={"count": "Jumlah FAQ", "category": "Kategori"},
-        height=520,
-    )
-    fig_category.update_layout(template="plotly_white", yaxis={"categoryorder": "total ascending"})
-    col1.plotly_chart(fig_category, use_container_width=True)
-
-    semester_df = faq_df.copy()
-    semester_df["semester"] = semester_df["semester"].replace("", "Umum")
-    semester_counts = semester_df["semester"].value_counts().reset_index()
-    semester_counts.columns = ["semester", "count"]
-    fig_semester = px.bar(
-        semester_counts,
-        x="semester",
-        y="count",
-        title="Distribusi FAQ berdasarkan semester",
-        labels={"count": "Jumlah FAQ", "semester": "Semester"},
-        height=520,
-    )
-    fig_semester.update_layout(template="plotly_white")
-    col2.plotly_chart(fig_semester, use_container_width=True)
-
-    col3, col4 = st.columns(2)
-    peminatan_df = faq_df[faq_df["peminatan"] != ""]
-    if not peminatan_df.empty:
-        peminatan_counts = peminatan_df["peminatan"].value_counts().reset_index()
-        peminatan_counts.columns = ["peminatan", "count"]
-        fig_peminatan = px.pie(
-            peminatan_counts,
-            names="peminatan",
-            values="count",
-            title="Komposisi FAQ berdasarkan peminatan",
-            height=500,
-        )
-        fig_peminatan.update_layout(template="plotly_white")
-        col3.plotly_chart(fig_peminatan, use_container_width=True)
-
-    if not eval_df.empty:
-        eval_result = evaluate_questions(eval_df, faq_df, vectorizer, tfidf_matrix, threshold)
-        accuracy = eval_result["is_correct"].mean() if len(eval_result) else 0
-        col4.metric("Akurasi evaluasi sederhana", f"{accuracy:.2%}")
-        fig_eval = px.bar(
-            eval_result,
-            x="test_question",
-            y="similarity_score",
-            color="status",
-            title="Similarity score pada pertanyaan uji",
-            labels={"test_question": "Pertanyaan uji", "similarity_score": "Similarity score"},
-            height=500,
-        )
-        fig_eval.update_layout(template="plotly_white", xaxis_tickangle=-35)
-        col4.plotly_chart(fig_eval, use_container_width=True)
-        st.dataframe(eval_result, use_container_width=True)
-
-with tab_dataset:
-    st.subheader("Dataset FAQ MTI UNPAM")
-    st.dataframe(faq_df, use_container_width=True, hide_index=True)
-    st.download_button(
-        "Download dataset FAQ",
-        faq_df.to_csv(index=False).encode("utf-8"),
-        file_name="faq_mti_unpam.csv",
-        mime="text/csv",
-    )
-
-with tab_about:
-    st.subheader("Tentang Project")
-    st.write(
-        "Project ini merupakan prototype chatbot informasi akademik Program Magister Teknik Informatika UNPAM. "
-        "Metode yang digunakan adalah text preprocessing sederhana, TF-IDF Vectorizer, dan Cosine Similarity untuk mencocokkan pertanyaan pengguna dengan dataset FAQ."
-    )
-    st.markdown("""
-    **Batasan prototype:**
-    - Dataset FAQ masih berbasis informasi awal dan perlu divalidasi kembali jika akan digunakan secara resmi.
-    - Chatbot belum menggunakan LLM atau database eksternal.
-    - Jawaban bersifat bantuan informasi, bukan pengganti kanal resmi program studi atau PMB.
-    """)
